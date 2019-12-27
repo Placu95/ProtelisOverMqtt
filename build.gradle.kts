@@ -28,6 +28,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation("org.protelis:protelis:${extra["protelisVersion"].toString()}")
     implementation("com.javadocmd:simplelatlng:${extra["simplelatlng"].toString()}")
+    implementation("org.apache.commons:commons-lang3:${extra["commons-lang3"].toString()}")
     downloadLibFromUrl(extra["MqttClientWrapperLib"].toString(), extra["MqttClientWrapperUrl"].toString())
     testImplementation("io.kotlintest:kotlintest-runner-junit5:${extra["kotlinTestVersion"].toString()}")
     testImplementation("io.mockk:mockk:1.9.1")
