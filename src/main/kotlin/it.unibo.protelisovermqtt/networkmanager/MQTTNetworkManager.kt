@@ -1,14 +1,19 @@
 package it.unibo.protelisovermqtt.networkmanager
 
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonObject
+import com.google.gson.JsonSerializer
 import it.unibo.mqttclientwrapper.MQTTClientSingleton
 import it.unibo.mqttclientwrapper.api.MqttClientBasicApi
 import it.unibo.mqttclientwrapper.api.MqttMessageType
 import it.unibo.protelisovermqtt.util.Topics
+import org.apache.commons.lang3.SerializationUtils
 import org.protelis.lang.datatype.DeviceUID
 import org.protelis.lang.datatype.impl.StringUID
 import org.protelis.vm.CodePath
 import org.protelis.vm.NetworkManager
 import java.io.Serializable
+import java.util.*
 
 open class MQTTNetworkManager(
     val deviceUID: StringUID,
@@ -19,6 +24,20 @@ open class MQTTNetworkManager(
     private var messages: Map<DeviceUID, Map<CodePath, Any>> = emptyMap()
 
     init {
+        mqttClient.addSerializer(MessageState::class.java,
+            JsonSerializer { state, _, _ ->
+                val obj = JsonObject().also { 
+                    it.addProperty("state",
+                        Base64.getEncoder().encodeToString(SerializationUtils.serialize(state))
+                    )}
+                obj
+            })
+
+        mqttClient.addDeserializer(MessageState::class.java,
+            JsonDeserializer { jsonElement, _, _ ->
+                SerializationUtils.deserialize<MessageState> (Base64.getDecoder().decode(jsonElement.asJsonObject["state"].asString))
+            })
+        
         neighbors.forEach{subscribeToMqtt(it)}
     }
 
