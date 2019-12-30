@@ -31,7 +31,7 @@ data class Node(val uid: StringUID, var position: LatLongPosition) {
  */
 class NeighborhoodManager(val applicationUID: String, private val mqttClient: MqttClientBasicApi, val range: Double) {
 
-    object NeighborhoodManager {
+    companion object {
         fun computeNeighborhood(node: Node, nodes: Set<Node>, range: Double) =
             nodes.filter { it != node }.filter { node.position.distanceTo(it.position) < range }.toSet()
     }
