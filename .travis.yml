@@ -29,8 +29,7 @@ jobs:
     - stage: check
       name: "Deep check on reference OS and JDK"
       os: *reference_os
-      env:
-        - *reference_jdk
+      env: *reference_jdk
       script:
         - ./gradlew clean
         - ./gradlew check --parallel
