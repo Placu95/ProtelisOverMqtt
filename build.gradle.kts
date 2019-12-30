@@ -1,8 +1,10 @@
+import com.github.spotbugs.SpotBugsTask
 import java.net.URL
 
 plugins {
     kotlin("jvm") version "1.3.61"
     id("com.github.johnrengelman.shadow") version "5.2.0"
+    id("com.github.spotbugs") version "2.0.0"
 }
 
 group = "it.unibo"
@@ -32,6 +34,22 @@ dependencies {
     downloadLibFromUrl(extra["MqttClientWrapperLib"].toString(), extra["MqttClientWrapperUrl"].toString())
     testImplementation("io.kotlintest:kotlintest-runner-junit5:${extra["kotlinTestVersion"].toString()}")
     testImplementation("io.mockk:mockk:1.9.1")
+}
+
+spotbugs {
+    effort = "max"
+    reportLevel = "low"
+    isShowProgress = true
+    val excludeFile = File("${rootProject.projectDir}/config/spotbugs/excludes.xml")
+    if (excludeFile.exists()) {
+        excludeFilter = excludeFile
+    }
+}
+tasks.withType<SpotBugsTask> {
+    reports {
+        xml.isEnabled = false
+        html.isEnabled = true
+    }
 }
 
 tasks.shadowJar.configure {
