@@ -15,7 +15,24 @@ import org.protelis.vm.NetworkManager
 import java.io.Serializable
 import java.util.*
 
-data class MessageState(val payload: Map<CodePath, Any>): Serializable, MqttMessageType
+data class MessageState(val payload: Map<CodePath, Any>): Serializable, MqttMessageType {
+
+    companion object {
+        val jsonSerializer = JsonSerializer<MessageState> { state, _, _ ->
+            val obj = JsonObject().also {
+                it.addProperty(
+                    "state",
+                    Base64.getEncoder().encodeToString(SerializationUtils.serialize(state))
+                )
+            }
+            obj
+        }
+
+        val jsonDeserialier = JsonDeserializer { jsonElement, _, _ ->
+            SerializationUtils.deserialize<MessageState>(Base64.getDecoder().decode(jsonElement.asJsonObject["state"].asString))
+        }
+    }
+}
 
 open class MQTTNetworkManager(
     val deviceUID: StringUID,
@@ -28,19 +45,8 @@ open class MQTTNetworkManager(
     init {
 
         mqttClient
-            .addSerializer(MessageState::class.java,
-                JsonSerializer { state, _, _ ->
-                    val obj = JsonObject().also {
-                        it.addProperty("state",
-                            Base64.getEncoder().encodeToString(SerializationUtils.serialize(state))
-                        )}
-                    obj
-                })
-            .addDeserializer(MessageState::class.java,
-                JsonDeserializer { jsonElement, _, _ ->
-                    SerializationUtils.deserialize<MessageState> (Base64.getDecoder().decode(jsonElement.asJsonObject["state"].asString))
-            })
-
+            .addSerializer(MessageState::class.java, MessageState.jsonSerializer)
+            .addDeserializer(MessageState::class.java, MessageState.jsonDeserialier)
 
         neighbors.forEach{subscribeToMqtt(it)}
     }

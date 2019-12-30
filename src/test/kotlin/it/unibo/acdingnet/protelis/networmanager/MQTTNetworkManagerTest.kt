@@ -14,6 +14,7 @@ import org.protelis.lang.datatype.impl.StringUID
 import org.protelis.vm.CodePath
 import org.protelis.vm.impl.DefaultTimeEfficientCodePath
 
+
 class MQTTNetworkManagerTest: StringSpec() {
 
     override fun beforeSpecClass(spec: Spec, tests: List<TopLevelTest>) {
@@ -23,6 +24,7 @@ class MQTTNetworkManagerTest: StringSpec() {
 
     init {
         "the state should arrive to the neighbors" {
+
             val netId1 = StringUID("net1")
             val netId2 = StringUID("net2")
             val net1 = MQTTNetworkManager(netId1, MQTTClientSingleton.instance, "test", setOf(netId2))
