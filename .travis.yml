@@ -34,7 +34,7 @@ jobs:
         - *reference_jdk
       script:
         - ./gradlew clean
-        - ./gradlew test --parallel
+        - ./gradlew check --parallel
 before_install:
   - curl "${GRAVIS}.disable-windows-defender.sh" --output .disable-windows-defender.sh
   - source .disable-windows-defender.sh
