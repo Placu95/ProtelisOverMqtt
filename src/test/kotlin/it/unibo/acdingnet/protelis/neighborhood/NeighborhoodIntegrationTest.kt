@@ -1,7 +1,11 @@
 package it.unibo.acdingnet.protelis.neighborhood
 
-import io.kotlintest.*
+import io.kotlintest.Spec
+import io.kotlintest.TestCase
+import io.kotlintest.TestResult
 import io.kotlintest.extensions.TopLevelTest
+import io.kotlintest.matchers.collections.shouldContain
+import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 import it.unibo.mqttclientwrapper.MQTTClientSingleton
 import it.unibo.mqttclientwrapper.MqttClientType
@@ -49,7 +53,7 @@ class NeighborhoodIntegrationTest : StringSpec() {
 
             neighborhoodManager.neighborhood.keys.size shouldBe 1
             neighborhoodManager.neighborhood.filter { it.value.isEmpty() }.count() shouldBe 1
-            should { net.getNodeNeighbors().isEmpty() }
+            net.getNodeNeighbors().isEmpty() shouldBe true
         }
 
         "two nodes with distance lower than range should be neighbors" {
@@ -63,8 +67,8 @@ class NeighborhoodIntegrationTest : StringSpec() {
             neighborhoodManager.neighborhood.filter { it.value.size == 1 }.count() shouldBe 2
             neighborhoodManager.neighborhood.filter { it.key.uid.uid == uid1.uid && it.value.all { it.uid.uid == uid2.uid } }.count() shouldBe 1
             neighborhoodManager.neighborhood.filter { it.key.uid.uid == uid2.uid && it.value.all { it.uid.uid == uid1.uid } }.count() shouldBe 1
-            should { net1.getNodeNeighbors().map { it.uid }.contains(uid2.uid) }
-            should { net2.getNodeNeighbors().map { it.uid }.contains(uid1.uid) }
+            net1.getNodeNeighbors().map { it.uid } shouldContain uid2.uid
+            net2.getNodeNeighbors().map { it.uid } shouldContain uid1.uid
         }
 
         "two nodes with distance lower than range should not be neighbors" {
@@ -78,8 +82,8 @@ class NeighborhoodIntegrationTest : StringSpec() {
             neighborhoodManager.neighborhood.filter { it.value.size == 0 }.count() shouldBe 2
             neighborhoodManager.neighborhood.filter { it.key.uid.uid == uid1.uid && it.value.none { it.uid.uid == uid2.uid } }.count() shouldBe 1
             neighborhoodManager.neighborhood.filter { it.key.uid.uid == uid2.uid && it.value.none { it.uid.uid == uid1.uid } }.count() shouldBe 1
-            should { net1.getNodeNeighbors().map { it.uid }.isEmpty() }
-            should { net2.getNodeNeighbors().map { it.uid }.isEmpty() }
+            net1.getNodeNeighbors().map { it.uid }.isEmpty() shouldBe true
+            net2.getNodeNeighbors().map { it.uid }.isEmpty() shouldBe true
         }
 
         "when a node leave the system, the neighborhoodManager should delete the node" {
@@ -88,12 +92,12 @@ class NeighborhoodIntegrationTest : StringSpec() {
 
             val net1 = MQTTNetMgrWithMQTTNeighborhoodMgrSpy(uid1, MQTTClientSingleton.instance, applicationID, position1)
             val net2 = MQTTNetMgrWithMQTTNeighborhoodMgrSpy(uid2, MQTTClientSingleton.instance, applicationID, neighborToPosition1)
-            should { net1.getNodeNeighbors().map { it.uid }.contains(uid2.uid) }
+            net1.getNodeNeighbors().map { it.uid } shouldContain uid2.uid
             net2.nodeDeleted()
 
             neighborhoodManager.neighborhood.keys.size shouldBe 1
             neighborhoodManager.neighborhood.filter { it.key.uid.uid == uid1.uid && it.value.isEmpty() }.count() shouldBe 1
-            should { net1.getNodeNeighbors().map { it.uid }.isEmpty() }
+            net1.getNodeNeighbors().map { it.uid }.isEmpty() shouldBe true
         }
 
         "when a node's neighbors change position and move outside the range of the node should exit from the neighborhood" {
@@ -107,8 +111,8 @@ class NeighborhoodIntegrationTest : StringSpec() {
             neighborhoodManager.neighborhood.filter { it.value.size == 1 }.count() shouldBe 2
             neighborhoodManager.neighborhood.filter { it.key.uid.uid == uid1.uid && it.value.all { it.uid.uid == uid2.uid } }.count() shouldBe 1
             neighborhoodManager.neighborhood.filter { it.key.uid.uid == uid2.uid && it.value.all { it.uid.uid == uid1.uid } }.count() shouldBe 1
-            should { net1.getNodeNeighbors().map { it.uid }.contains(uid2.uid) }
-            should { net2.getNodeNeighbors().map { it.uid }.contains(uid1.uid) }
+            net1.getNodeNeighbors().map { it.uid } shouldContain uid2.uid
+            net2.getNodeNeighbors().map { it.uid } shouldContain uid1.uid
 
             net2.changePosition(notNeighborToPosition1)
 
@@ -116,8 +120,8 @@ class NeighborhoodIntegrationTest : StringSpec() {
             neighborhoodManager.neighborhood.filter { it.value.size == 0 }.count() shouldBe 2
             neighborhoodManager.neighborhood.filter { it.key.uid.uid == uid1.uid && it.value.none { it.uid.uid == uid2.uid } }.count() shouldBe 1
             neighborhoodManager.neighborhood.filter { it.key.uid.uid == uid2.uid && it.value.none { it.uid.uid == uid1.uid } }.count() shouldBe 1
-            should { net1.getNodeNeighbors().map { it.uid }.isEmpty() }
-            should { net2.getNodeNeighbors().map { it.uid }.isEmpty() }
+            net1.getNodeNeighbors().map { it.uid }.isEmpty() shouldBe true
+            net2.getNodeNeighbors().map { it.uid }.isEmpty() shouldBe true
         }
 
     }
