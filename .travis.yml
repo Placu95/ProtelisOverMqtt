@@ -22,9 +22,6 @@ env:
     - *reference_jdk
     - JDK="adopt@1.12"
 jobs:
-  exclude:
-    - os: *reference_os
-      env: *reference_jdk
   include:
     - stage: check
       name: "Deep check on reference OS and JDK"
