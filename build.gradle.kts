@@ -1,10 +1,10 @@
 import com.github.spotbugs.SpotBugsTask
-import java.net.URL
 
 plugins {
-    kotlin("jvm") version "1.3.61"
-    id("com.github.johnrengelman.shadow") version "5.2.0"
-    id("com.github.spotbugs") version "2.0.0"
+    kotlin("jvm") version Versions.org_jetbrains_kotlin_jvm_gradle_plugin
+    id("com.github.johnrengelman.shadow") version Versions.com_github_johnrengelman_shadow_gradle_plugin
+    id("com.github.spotbugs") version Versions.com_github_spotbugs_gradle_plugin
+    id("de.fayard.buildSrcVersions") version Versions.de_fayard_buildsrcversions_gradle_plugin
 }
 
 group = "it.unibo"
@@ -14,26 +14,14 @@ repositories {
     mavenCentral()
 }
 
-fun downloadLibFromUrl(libName: String , libUrl: String, libSaveDir: String = "${projectDir.absolutePath}/build/libs") {
-    val folder = File(libSaveDir)
-    if (!folder.exists()) {
-        folder.mkdirs()
-    }
-    val file = File("$libSaveDir/$libName")
-    if (!file.exists()) {
-        URL(libUrl).openStream().readAllBytes().also { file.appendBytes(it) }
-    }
-    dependencies.add("implementation", files(file.absolutePath))
-}
-
 dependencies {
-    implementation(kotlin("stdlib-jdk8"))
-    implementation("org.protelis:protelis:${extra["protelisVersion"].toString()}")
-    implementation("com.javadocmd:simplelatlng:${extra["simplelatlng"].toString()}")
-    implementation("org.apache.commons:commons-lang3:${extra["commons-lang3"].toString()}")
-    downloadLibFromUrl(extra["MqttClientWrapperLib"].toString(), extra["MqttClientWrapperUrl"].toString())
-    testImplementation("io.kotlintest:kotlintest-runner-junit5:${extra["kotlinTestVersion"].toString()}")
-    testImplementation("io.mockk:mockk:1.9.1")
+    implementation(Libs.kotlin_stdlib_jdk8)
+    implementation(Libs.protelis)
+    implementation(Libs.simplelatlng)
+    implementation(Libs.commons_lang3)
+    implementation(files(Util.downloadLibFromUrl(ExternalLib.mqtt_client_wrapper)))
+    testImplementation(Libs.kotlintest_runner_junit5)
+    testImplementation(Libs.mockk)
 }
 
 spotbugs {
