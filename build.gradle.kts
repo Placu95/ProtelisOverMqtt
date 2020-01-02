@@ -5,6 +5,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version Versions.com_github_johnrengelman_shadow_gradle_plugin
     id("com.github.spotbugs") version Versions.com_github_spotbugs_gradle_plugin
     id("de.fayard.buildSrcVersions") version Versions.de_fayard_buildsrcversions_gradle_plugin
+    id("org.jlleitschuh.gradle.ktlint") version Versions.org_jlleitschuh_gradle_ktlint_gradle_plugin
 }
 
 group = "it.unibo"
@@ -15,7 +16,7 @@ repositories {
 }
 
 dependencies {
-    implementation(Libs.kotlin_stdlib_jdk8)
+    implementation(Libs.org_jetbrains_kotlin_kotlin_stdlib_jdk8)
     implementation(Libs.protelis)
     implementation(Libs.simplelatlng)
     implementation(Libs.commons_lang3)
@@ -43,9 +44,9 @@ tasks.withType<SpotBugsTask> {
 tasks.shadowJar.configure {
     // removes "-all" from the jar name
     archiveClassifier.set("")
-    exclude ("**/*.kotlin_metadata")
-    exclude ("**/*.kotlin_module")
-    exclude ("**/*.kotlin_builtins")
+    exclude("**/*.kotlin_metadata")
+    exclude("**/*.kotlin_module")
+    exclude("**/*.kotlin_builtins")
 }
 
 val test by tasks.getting(Test::class) {

@@ -11,6 +11,8 @@ object Versions {
 
     const val simplelatlng: String = "1.3.1" 
 
+    const val ktlint: String = "0.33.0" // available: "0.36.0"
+
     const val de_fayard_buildsrcversions_gradle_plugin: String = "0.3.2" // available: "0.7.0"
 
     const val kotlintest_runner_junit5: String = "3.3.2" // available: "3.4.2"
@@ -19,9 +21,19 @@ object Versions {
 
     const val commons_lang3: String = "3.7" // available: "3.9"
 
+    const val org_gradle_kotlin_kotlin_dsl_gradle_plugin: String = "1.2.6" // available: "1.3.3"
+
     const val org_jetbrains_kotlin_jvm_gradle_plugin: String = "1.3.61" 
 
-    const val org_jetbrains_kotlin: String = "1.3.61" 
+    const val kotlin_reflect: String = "1.3.21" // available: "1.3.61"
+
+    const val kotlin_sam_with_receiver: String = "1.3.61" 
+
+    const val kotlin_scripting_compiler_embeddable: String = "1.3.61" 
+
+    const val org_jetbrains_kotlin_kotlin_stdlib_jdk8: String = "1.3.21" // available: "1.3.61"
+
+    const val org_jlleitschuh_gradle_ktlint_gradle_plugin: String = "8.1.0" // available: "9.1.1"
 
     const val protelis: String = "13.0.3" // available: "13.1.0"
 

@@ -14,8 +14,7 @@ import org.protelis.lang.datatype.impl.StringUID
 import org.protelis.vm.CodePath
 import org.protelis.vm.impl.DefaultTimeEfficientCodePath
 
-
-class MQTTNetworkManagerTest: StringSpec() {
+class MQTTNetworkManagerTest : StringSpec() {
 
     override fun beforeSpecClass(spec: Spec, tests: List<TopLevelTest>) {
         super.beforeSpecClass(spec, tests)

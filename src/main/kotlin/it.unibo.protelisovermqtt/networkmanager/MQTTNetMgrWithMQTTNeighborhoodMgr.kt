@@ -34,7 +34,6 @@ open class MQTTNetMgrWithMQTTNeighborhoodMgr(
     fun changePosition(position: LatLongPosition) =
         mqttClient.publish(Topics.neighborhoodManagerTopic(applicationEUI), generateMessage(MessageType.UPDATE, deviceUID, position))
 
-
     fun nodeDeleted() = mqttClient.publish(Topics.neighborhoodManagerTopic(applicationEUI),
         generateMessage(MessageType.LEAVE, deviceUID, LatLongPosition.zero()))
 
@@ -42,5 +41,4 @@ open class MQTTNetMgrWithMQTTNeighborhoodMgr(
         generateMessage(type, Node(uid, position))
 
     private fun generateMessage(type: MessageType, node: Node) = NeighborhoodMessage(type, node)
-
 }

@@ -15,7 +15,7 @@ import org.protelis.vm.NetworkManager
 import java.io.Serializable
 import java.util.*
 
-data class MessageState(val payload: Map<CodePath, Any>): Serializable, MqttMessageType {
+data class MessageState(val payload: Map<CodePath, Any>) : Serializable, MqttMessageType {
 
     companion object {
         val jsonSerializer = JsonSerializer<MessageState> { state, _, _ ->
@@ -38,7 +38,8 @@ open class MQTTNetworkManager(
     val deviceUID: StringUID,
     protected var mqttClient: MqttClientBasicApi = MQTTClientSingleton.instance,
     protected val applicationEUI: String,
-    private var neighbors: Set<StringUID> = emptySet()): NetworkManager {
+    private var neighbors: Set<StringUID> = emptySet()
+) : NetworkManager {
 
     private var messages: Map<DeviceUID, Map<CodePath, Any>> = emptyMap()
 
@@ -48,7 +49,7 @@ open class MQTTNetworkManager(
             .addSerializer(MessageState::class.java, MessageState.jsonSerializer)
             .addDeserializer(MessageState::class.java, MessageState.jsonDeserialier)
 
-        neighbors.forEach{subscribeToMqtt(it)}
+        neighbors.forEach { subscribeToMqtt(it) }
     }
 
     protected fun subscribeToMqtt(deviceUID: StringUID) {
@@ -62,10 +63,10 @@ open class MQTTNetworkManager(
     override fun getNeighborState(): Map<DeviceUID, Map<CodePath, Any>> = messages.apply { messages = emptyMap() }
 
     fun setNeighbors(neighbors: Set<StringUID>) {
-        //remove sensor not more neighbors
-        this.neighbors.filter { !neighbors.contains(it) }.forEach{mqttClient.unsubscribe(this, Topics.nodeStateTopic(applicationEUI, it))}
-        //add new neighbors
-        neighbors.filter { !this.neighbors.contains(it) }.forEach{subscribeToMqtt(it)}
+        // remove sensor not more neighbors
+        this.neighbors.filter { !neighbors.contains(it) }.forEach { mqttClient.unsubscribe(this, Topics.nodeStateTopic(applicationEUI, it)) }
+        // add new neighbors
+        neighbors.filter { !this.neighbors.contains(it) }.forEach { subscribeToMqtt(it) }
         this.neighbors = neighbors
     }
 

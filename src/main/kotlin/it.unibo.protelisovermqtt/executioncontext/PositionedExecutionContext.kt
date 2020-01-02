@@ -21,7 +21,7 @@ abstract class PositionedExecutionContext(
     netmgr: NetworkManager,
     randomSeed: Int = 1,
     execEnvironment: ExecutionEnvironment = SimpleExecutionEnvironment()
-    ) : AbstractExecutionContext<PositionedExecutionContext>(execEnvironment, netmgr), LocalizedDevice, SpatiallyEmbeddedDevice<Double> {
+) : AbstractExecutionContext<PositionedExecutionContext>(execEnvironment, netmgr), LocalizedDevice, SpatiallyEmbeddedDevice<Double> {
 
     private val randomGenerator = Random(randomSeed)
     private val _coordinates: Tuple by lazy {
@@ -35,5 +35,5 @@ abstract class PositionedExecutionContext(
     override fun nbrVector(): Field<Tuple> = TODO("not implemented")
     override fun nbrRange(): Field<Double> = buildField({ it.distanceTo(nodePosition) }, nodePosition)
 
-    fun log(log: String) = println("${deviceUID}: $log")
+    fun log(log: String) = println("$deviceUID: $log")
 }

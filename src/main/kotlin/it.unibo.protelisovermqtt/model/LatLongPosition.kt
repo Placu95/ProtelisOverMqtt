@@ -7,16 +7,16 @@ import java.nio.ByteBuffer
 /**
  * LatLong position in meter
  */
-data class LatLongPosition(private val latLong: LatLng): Serializable {
+data class LatLongPosition(private val latLong: LatLng) : Serializable {
 
-    constructor(latitude: Double, longitude: Double): this(LatLng(latitude, longitude))
+    constructor(latitude: Double, longitude: Double) : this(LatLng(latitude, longitude))
 
     fun getLatitude() = latLong.latitude
     fun getLongitude() = latLong.longitude
 
     fun distanceTo(position: LatLongPosition): Double {
-        val lat1R = Math.toRadians(getLatitude()) //TODO this can be lazy but is necessary modify conversion to json
-        val long1R = Math.toRadians(getLongitude()) //TODO this can be lazy but is necessary modify conversion to json
+        val lat1R = Math.toRadians(getLatitude()) // TODO this can be lazy but is necessary modify conversion to json
+        val long1R = Math.toRadians(getLongitude()) // TODO this can be lazy but is necessary modify conversion to json
         val lat2R = Math.toRadians(position.getLatitude())
         val long2R = Math.toRadians(position.getLongitude())
 
@@ -27,13 +27,13 @@ data class LatLongPosition(private val latLong: LatLng): Serializable {
 
     fun toBytes(): List<Byte> {
         val data = ByteArray(8)
-        ByteBuffer.wrap(data, 0,4).putFloat(getLatitude().toFloat())
-        ByteBuffer.wrap(data, 4,4).putFloat(getLongitude().toFloat())
+        ByteBuffer.wrap(data, 0, 4).putFloat(getLatitude().toFloat())
+        ByteBuffer.wrap(data, 4, 4).putFloat(getLongitude().toFloat())
         return data.toList()
     }
 
     companion object {
         const val EARTH_MEAN_RADIUS_METERS: Double = 6371009.0
-        fun zero() = LatLongPosition(0.0,0.0)
+        fun zero() = LatLongPosition(0.0, 0.0)
     }
 }

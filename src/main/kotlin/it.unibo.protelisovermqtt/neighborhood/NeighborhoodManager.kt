@@ -6,12 +6,12 @@ import it.unibo.protelisovermqtt.model.LatLongPosition
 import it.unibo.protelisovermqtt.util.Topics
 import org.protelis.lang.datatype.impl.StringUID
 
-data class NeighborhoodMessage(val type: MessageType, val node: Node): MqttMessageType {
+data class NeighborhoodMessage(val type: MessageType, val node: Node) : MqttMessageType {
 
-    enum class MessageType {ADD, UPDATE, LEAVE}
+    enum class MessageType { ADD, UPDATE, LEAVE }
 }
 
-data class NewNeighborhoodMessage(val neighborhood: Set<Pair<Node, Set<Node>>>): MqttMessageType
+data class NewNeighborhoodMessage(val neighborhood: Set<Pair<Node, Set<Node>>>) : MqttMessageType
 
 data class Node(val uid: StringUID, var position: LatLongPosition) {
 
@@ -39,9 +39,9 @@ class NeighborhoodManager(val applicationUID: String, private val mqttClient: Mq
     val neighborhood: MutableMap<Node, MutableSet<Node>> = mutableMapOf()
 
     init {
-        mqttClient.subscribe(this, Topics.neighborhoodManagerTopic(applicationUID), NeighborhoodMessage::class.java)
-            { _, msg ->
-                when(msg.type) {
+        mqttClient.subscribe(this, Topics.neighborhoodManagerTopic(applicationUID),
+            NeighborhoodMessage::class.java) { _, msg ->
+                when (msg.type) {
                     NeighborhoodMessage.MessageType.ADD -> addNode(msg.node)
                     NeighborhoodMessage.MessageType.LEAVE -> removeNode(msg.node)
                     NeighborhoodMessage.MessageType.UPDATE -> updateNode(msg.node)
@@ -53,7 +53,7 @@ class NeighborhoodManager(val applicationUID: String, private val mqttClient: Mq
     private fun addNode(node: Node) {
         val nodeNeighborhood = neighborhood.keys.filter { node.position.distanceTo(it.position) < range }.toMutableSet()
         neighborhood += (node to nodeNeighborhood)
-        nodeNeighborhood.forEach{
+        nodeNeighborhood.forEach {
             neighborhood[it]!! += node
         }
     }
@@ -61,7 +61,7 @@ class NeighborhoodManager(val applicationUID: String, private val mqttClient: Mq
     private fun removeNode(node: Node) {
         val nodeNeighborhood = neighborhood[node]
         neighborhood -= node
-        nodeNeighborhood?.forEach{
+        nodeNeighborhood?.forEach {
             neighborhood[it]?.let {
                 it -= node
             }
@@ -71,14 +71,14 @@ class NeighborhoodManager(val applicationUID: String, private val mqttClient: Mq
     private fun updateNode(node: Node) {
         val newNeighborhood = neighborhood.keys.filter { it != node && node.position.distanceTo(it.position) < range }.toMutableSet()
         newNeighborhood.filter { !neighborhood[node]!!.contains(it) }.also {
-            it.forEach{ neighborhood[it]!! += node }
+            it.forEach { neighborhood[it]!! += node }
         }
         neighborhood[node]?.filter { !newNeighborhood.contains(it) }.also {
-            it?.forEach{ neighborhood[it]!! -= node }
+            it?.forEach { neighborhood[it]!! -= node }
         }
         neighborhood[node] = newNeighborhood
     }
 
     private fun sendNewNeigh() = mqttClient.publish(Topics.neighborhoodTopic(applicationUID),
-        NewNeighborhoodMessage(neighborhood.map { Pair(it.key,it.value) }.toSet()))
+        NewNeighborhoodMessage(neighborhood.map { Pair(it.key, it.value) }.toSet()))
 }

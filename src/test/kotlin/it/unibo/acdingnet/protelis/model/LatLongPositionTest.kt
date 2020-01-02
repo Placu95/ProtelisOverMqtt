@@ -5,7 +5,7 @@ import io.kotlintest.matchers.doubles.shouldBeGreaterThan
 import io.kotlintest.specs.StringSpec
 import it.unibo.protelisovermqtt.model.LatLongPosition
 
-class LatLongPositionTest: StringSpec() {
+class LatLongPositionTest : StringSpec() {
 
     init {
         "distance between the same position should be 0" {

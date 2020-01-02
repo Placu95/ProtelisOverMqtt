@@ -123,7 +123,6 @@ class NeighborhoodIntegrationTest : StringSpec() {
             net1.getNodeNeighbors().map { it.uid }.isEmpty() shouldBe true
             net2.getNodeNeighbors().map { it.uid }.isEmpty() shouldBe true
         }
-
     }
 
     override fun afterSpecClass(spec: Spec, results: Map<TestCase, TestResult>) {

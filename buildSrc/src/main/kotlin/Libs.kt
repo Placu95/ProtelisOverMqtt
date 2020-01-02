@@ -16,6 +16,10 @@ object Libs {
      * http://code.google.com/p/simplelatlng */
     const val simplelatlng: String = "com.javadocmd:simplelatlng:" + Versions.simplelatlng
 
+    /**
+     * https://github.com/pinterest/ktlint */
+    const val ktlint: String = "com.pinterest:ktlint:" + Versions.ktlint
+
     const val de_fayard_buildsrcversions_gradle_plugin: String =
             "de.fayard.buildSrcVersions:de.fayard.buildSrcVersions.gradle.plugin:" +
             Versions.de_fayard_buildsrcversions_gradle_plugin
@@ -33,20 +37,39 @@ object Libs {
      * http://commons.apache.org/proper/commons-lang/ */
     const val commons_lang3: String = "org.apache.commons:commons-lang3:" + Versions.commons_lang3
 
+    const val org_gradle_kotlin_kotlin_dsl_gradle_plugin: String =
+            "org.gradle.kotlin.kotlin-dsl:org.gradle.kotlin.kotlin-dsl.gradle.plugin:" +
+            Versions.org_gradle_kotlin_kotlin_dsl_gradle_plugin
+
     const val org_jetbrains_kotlin_jvm_gradle_plugin: String =
             "org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin:" +
             Versions.org_jetbrains_kotlin_jvm_gradle_plugin
 
     /**
      * https://kotlinlang.org/ */
-    const val kotlin_scripting_compiler_embeddable: String =
-            "org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:" +
-            Versions.org_jetbrains_kotlin
+    const val kotlin_reflect: String = "org.jetbrains.kotlin:kotlin-reflect:" +
+            Versions.kotlin_reflect
 
     /**
      * https://kotlinlang.org/ */
-    const val kotlin_stdlib_jdk8: String = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:" +
-            Versions.org_jetbrains_kotlin
+    const val kotlin_sam_with_receiver: String = "org.jetbrains.kotlin:kotlin-sam-with-receiver:" +
+            Versions.kotlin_sam_with_receiver
+
+    /**
+     * https://kotlinlang.org/ */
+    const val kotlin_scripting_compiler_embeddable: String =
+            "org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:" +
+            Versions.kotlin_scripting_compiler_embeddable
+
+    /**
+     * https://kotlinlang.org/ */
+    const val org_jetbrains_kotlin_kotlin_stdlib_jdk8: String =
+            "org.jetbrains.kotlin:kotlin-stdlib-jdk8:" +
+            Versions.org_jetbrains_kotlin_kotlin_stdlib_jdk8
+
+    const val org_jlleitschuh_gradle_ktlint_gradle_plugin: String =
+            "org.jlleitschuh.gradle.ktlint:org.jlleitschuh.gradle.ktlint.gradle.plugin:" +
+            Versions.org_jlleitschuh_gradle_ktlint_gradle_plugin
 
     /**
      * http://www.protelis.org */
