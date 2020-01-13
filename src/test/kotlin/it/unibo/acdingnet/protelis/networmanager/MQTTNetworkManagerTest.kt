@@ -18,7 +18,7 @@ class MQTTNetworkManagerTest : StringSpec() {
 
     override fun beforeSpecClass(spec: Spec, tests: List<TopLevelTest>) {
         super.beforeSpecClass(spec, tests)
-        MQTTClientSingleton.ClientBuilder().build(MqttClientType.MOCK)
+        MQTTClientSingleton.ClientBuilder().build(MqttClientType.MOCK_SERIALIZATION)
     }
 
     init {
