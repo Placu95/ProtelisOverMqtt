@@ -16,7 +16,7 @@ object Topics {
 
     fun neighborhoodTopic(applicationID: String): String = "application/$applicationID/neighborhood"
 
-    fun nodeStateTopic(applicationID: String, deviceID: StringUID): String = "${Topics.nodeBaseTopic(applicationID, deviceID)}state"
+    fun nodeStateTopic(applicationID: String, deviceID: StringUID): String = "${nodeBaseTopic(applicationID, deviceID)}state"
 
-    fun nodeStateTopic(applicationID: String, deviceID: String): String = "${Topics.nodeBaseTopic(applicationID, deviceID)}state"
+    fun nodeStateTopic(applicationID: String, deviceID: String): String = "${nodeBaseTopic(applicationID, deviceID)}state"
 }
