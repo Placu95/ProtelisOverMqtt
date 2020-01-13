@@ -29,16 +29,18 @@ data class Node(val uid: StringUID, var position: LatLongPosition) {
 /**
  * Simple NeighborhoodManager that suppose symmetric distance between two position
  */
-class NeighborhoodManager(val applicationUID: String, private val mqttClient: MqttClientBasicApi, val range: Double) {
+class NeighborhoodManager(val applicationUID: String, private val mqttClient: MqttClientBasicApi, val range: Double, initialGroup: Set<Node> = emptySet()) {
 
     companion object {
         fun computeNeighborhood(node: Node, nodes: Set<Node>, range: Double) =
             nodes.filter { it != node }.filter { node.position.distanceTo(it.position) < range }.toSet()
     }
 
-    val neighborhood: MutableMap<Node, MutableSet<Node>> = mutableMapOf()
+    val neighborhood: MutableMap<Node, MutableSet<Node>>
 
     init {
+        neighborhood =
+            initialGroup.map { it to computeNeighborhood(it, initialGroup, range).toMutableSet() }.toMap().toMutableMap()
         mqttClient.subscribe(this, Topics.neighborhoodManagerTopic(applicationUID),
             NeighborhoodMessage::class.java) { _, msg ->
                 when (msg.type) {
@@ -49,6 +51,8 @@ class NeighborhoodManager(val applicationUID: String, private val mqttClient: Mq
                 sendNewNeigh()
             }
     }
+
+    fun getNeighborhoodByNodeId(id: StringUID): Set<Node> = neighborhood[Node(id, LatLongPosition.zero())].orEmpty()
 
     private fun addNode(node: Node) {
         val nodeNeighborhood = neighborhood.keys.filter { node.position.distanceTo(it.position) < range }.toMutableSet()
